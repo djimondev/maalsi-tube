@@ -32,3 +32,19 @@
 
 1. Run `npm run build` to build the project for production
 2. Run `docker run -d -p 8082:80 --name maalsi-tube-server-apache -v $(pwd)/dist:/usr/local/apache2/htdocs httpd`
+
+## Serve With Docker and Caddy (Dockerfile)
+
+1. Run `npm run build` to build the project for production
+2. Run `docker build -t maalsi-tube-server-caddy .`
+3. Run `docker run -d -p 8083:80 --name maalsi-tube-server-caddy maalsi-tube-server-caddy`
+
+## Dockerfile for Caddy
+
+```Dockerfile
+FROM ubuntu:latest
+RUN apt update -y
+RUN apt install -y caddy
+COPY ./dist /usr/share/caddy
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
+```
