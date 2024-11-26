@@ -81,3 +81,10 @@ services:
         ports:
             - "8093:80"
 ```
+
+## Publish the image to Docker Hub
+
+1. Create a Docker Hub account
+2. Run `docker login`
+3. Run `docker build -t neodigit/maalsi-tube-server-caddy:v1.0 .`
+4. Run `docker push neodigit/maalsi-tube-server-caddy:v1.0`
