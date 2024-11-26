@@ -37,9 +37,10 @@ export const Header = ({ onSearch }) => {
                                 className="w-full px-4 py-2 border border-gray-300 rounded-l-full focus:outline-none focus:border-blue-500"
                                 value={query}
                                 onChange={e => setQuery(e.target.value)}
+                                readOnly={isFiltered}
                             />
                             <button type="submit" className="px-6 bg-gray-100 border border-l-0 border-gray-300 rounded-r-full hover:bg-gray-200">
-                                {isFiltered ? <X className="w-6 h-6" /> : <Search className="w-6 h-6" />}
+                                {isFiltered ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
                             </button>
                         </div>
                     </form>
