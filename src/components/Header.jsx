@@ -1,3 +1,4 @@
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 
@@ -45,7 +46,14 @@ export const Header = ({ onSearch }) => {
                         </div>
                     </form>
                 </div>
-                <div>Login</div>
+                <div>
+                    <SignedOut>
+                        <SignInButton />
+                    </SignedOut>
+                    <SignedIn>
+                        <UserButton />
+                    </SignedIn>
+                </div>
             </div>
         </header>
     );
