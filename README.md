@@ -8,7 +8,9 @@
 4. Open `http://localhost:5173` in your browser
 5. Enjoy 🎉
 
-## Serve With Multipass and Caddy
+## Virtualization
+
+### Serve With Multipass and Caddy
 
 1. Run `npm run build` to build the project for production
 2. Start a multipass instance with `multipass launch --name maalsi-tube-server --cpus 2 --mem 2G --disk 10G`
@@ -18,28 +20,30 @@
 6. Run `exit`
 7. Run `multipass mount ./dist/ maalsi-tube-server:/usr/share/caddy`
 
-## Serve With Docker and Caddy
+### Containerization
+
+## Serve With Docker and Caddy (imperative)
 
 1. Run `npm run build` to build the project for production
 2. Run `docker run -d -p 8080:80 --name maalsi-tube-server-caddy -v $(pwd)/dist:/usr/share/caddy caddy`
 
-## Serve With Docker and Nginx
+## Serve With Docker and Nginx (imperative)
 
 1. Run `npm run build` to build the project for production
 2. Run `docker run -d -p 8081:80 --name maalsi-tube-server-nginx -v $(pwd)/dist:/usr/share/nginx/html nginx`
 
-## Serve With Docker and Apache
+## Serve With Docker and Apache (imperative)
 
 1. Run `npm run build` to build the project for production
 2. Run `docker run -d -p 8082:80 --name maalsi-tube-server-apache -v $(pwd)/dist:/usr/local/apache2/htdocs httpd`
 
-## Serve With Docker and Caddy (Dockerfile)
+## Serve With Docker and Caddy (Dockerfile) (imperative)
 
 1. Run `npm run build` to build the project for production
 2. Run `docker build -t maalsi-tube-server-caddy .`
-3. Run `docker run -d -p 8083:80 --name maalsi-tube-server-caddy maalsi-tube-server-caddy`
+3. Run `docker run -d -p 8083:80 --name maalsi-tube-server-caddy-dockerfile maalsi-tube-server-caddy`
 
-## Dockerfile for Caddy
+## Dockerfile for Caddy (imperative)
 
 ```Dockerfile
 FROM ubuntu:latest
@@ -47,4 +51,33 @@ RUN apt update -y
 RUN apt install -y caddy
 COPY ./dist /usr/share/caddy
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
+```
+
+## Docker compose for Caddy (declarative)
+
+```yml
+version: "3"
+services:
+    caddy:
+        image: caddy:latest
+        ports:
+            - "8090:80"
+        volumes:
+            - ./dist:/usr/share/caddy
+    nginx:
+        image: nginx:latest
+        ports:
+            - "8091:80"
+        volumes:
+            - ./dist:/usr/share/nginx/html
+    apache:
+        image: httpd:latest
+        ports:
+            - "8092:80"
+        volumes:
+            - ./dist:/usr/local/apache2/htdocs
+    build-caddy:
+        build: .
+        ports:
+            - "8093:80"
 ```

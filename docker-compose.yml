@@ -1,0 +1,24 @@
+version: "3"
+services:
+    caddy:
+        image: caddy:latest
+        ports:
+            - "8090:80"
+        volumes:
+            - ./dist:/usr/share/caddy
+    nginx:
+        image: nginx:latest
+        ports:
+            - "8091:80"
+        volumes:
+            - ./dist:/usr/share/nginx/html
+    apache:
+        image: httpd:latest
+        ports:
+            - "8092:80"
+        volumes:
+            - ./dist:/usr/local/apache2/htdocs
+    build-caddy:
+        build: .
+        ports:
+            - "8093:80"
