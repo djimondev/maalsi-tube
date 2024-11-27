@@ -7,6 +7,12 @@
     VITE_BASE_API_URL=[your-base-api-url]
     ```
 
+## Running steps for starting the API
+
+1. Clone the maalsi-tube-api repository
+2. Run `npm install`
+3. Run `npx json-server db.json`
+
 ## Running steps for the project
 
 1. Clone the repository
