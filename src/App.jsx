@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "./components/Header";
 import UploadButton from "./components/UploadButton";
 import { VideoList } from "./components/VideoList";
 import { VideoPlayer } from "./components/VideoPlayer";
 import VideoUploadModal from "./components/VideoUploadModal";
-import { VIDEOS } from "./helpers/video.helper";
 import "./index.css";
+import { createVideo, getVideos } from "./services/video-api";
 
 function App() {
-    const [videos, setVideos] = useState(VIDEOS);
-    const [filteredResults, setFilteredResults] = useState(VIDEOS);
+    const [videos, setVideos] = useState([]);
+    const [filteredResults, setFilteredResults] = useState([]);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [showUploadModal, setShowUploadModal] = useState(false);
+
+    useEffect(() => {
+        getVideos().then(data => {
+            setVideos(data);
+            setFilteredResults(data);
+        });
+    }, []);
 
     const filterResults = query => {
         const filteredVideos =
@@ -20,14 +27,10 @@ function App() {
     };
 
     const handleUploadComplete = videoData => {
-        const newVideo = {
-            id: videos.length + 1,
-            ...videoData,
-            channel: user?.username || "Anonymous",
-            views: "0",
-            timestamp: "Just now"
-        };
-        setVideos([newVideo, ...videos]);
+        createVideo(videoData).then(data => {
+            setVideos(prevVideos => [...prevVideos, data]);
+            setFilteredResults(prevVideos => [...prevVideos, data]);
+        });
     };
 
     return (
@@ -40,7 +43,7 @@ function App() {
             {selectedVideo && (
                 <VideoPlayer
                     url={selectedVideo.url}
-                    title={selectedVideo.title}
+                    title={`${selectedVideo.id} - ${selectedVideo.title}`}
                     channel={selectedVideo.channel}
                     views={selectedVideo.views}
                     timestamp={selectedVideo.timestamp}
