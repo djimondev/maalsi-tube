@@ -138,7 +138,11 @@ docker node ls
 To start the stack run:
 
 ```bash
+multipass mount . maalsi-tube-server-master:/maalsi-tube-server-master
 multipass shell maalsi-tube-server-master
+cd maalsi-tube-server-master
+docker build -t maalsi-tube-video-api ./video_api/
+docker build --build-arg VITE_BASE_API_URL=[http://your-master-server-ip] --build-arg VITE_CLERK_PUBLISHABLE_KEY=[your-clerk-key] -t maalsi-tube-web-front .
 docker stack deploy -c docker-compose.yml maalsi-tube
 ```
 

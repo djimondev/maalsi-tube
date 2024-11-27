@@ -1,7 +1,6 @@
 version: "3.8"
 services:
     web_front:
-        container_name: web_front
         image: maalsi-tube-web-front
         build:
             context: ./
@@ -17,7 +16,6 @@ services:
         depends_on:
             - video_api
     video_api:
-        container_name: video_api
         image: maalsi-tube-video-api
         build: ./video_api
         ports:
