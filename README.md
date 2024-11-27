@@ -1,5 +1,12 @@
 # MAALSI TUBE
 
+## Environment values
+
+    ```env
+    VITE_CLERK_PUBLISHABLE_KEY=[your-clerk-public-key]
+    VITE_BASE_API_URL=[your-base-api-url]
+    ```
+
 ## Running steps for the project
 
 1. Clone the repository
