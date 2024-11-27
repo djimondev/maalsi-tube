@@ -1,20 +1,20 @@
-export const VideoCard = ({ video }) => {
+import React from "react";
+
+export const VideoCard = ({ video, onClick }) => {
+    const { title, thumbnail, channel, views, timestamp } = video;
+
     return (
-        <div className="max-w-4xl mx-auto mt-8">
-            <div className="flex flex-col md:flex-row bg-white shadow-sm rounded-lg overflow-hidden">
-                <div className="md:w-2/5">
-                    <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" />
-                </div>
-                <div className="p-6 md:w-3/5">
-                    <h2 className="text-lg font-semibold text-gray-800">{video.title}</h2>
-                    <p className="text-sm text-gray-600 mt-1">by {video.channel}</p>
-                    <p className="text-sm text-gray-600 mt-2">
-                        {video.views} views &bull; {new Date(video.timestamp).toLocaleDateString()}
-                    </p>
-                    <p className="text-sm text-gray-600 mt-2">{video.description}</p>
-                    <a href={video.url} target="_blank" rel="noreferrer" className="text-sm text-blue-600 mt-4 hover:underline">
-                        Watch Video
-                    </a>
+        <div className="flex flex-col cursor-pointer group" onClick={onClick}>
+            <div className="relative aspect-video rounded-xl overflow-hidden">
+                <img src={thumbnail} alt={title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200" />
+            </div>
+            <div className="mt-3 px-1">
+                <h3 className="text-sm font-semibold line-clamp-2">{title}</h3>
+                <p className="text-sm text-gray-600 mt-1">{channel}</p>
+                <div className="text-sm text-gray-600">
+                    <span>{views} views</span>
+                    <span className="mx-1">•</span>
+                    <span>{timestamp}</span>
                 </div>
             </div>
         </div>
