@@ -1,24 +1,16 @@
 version: "3"
 services:
-    caddy:
-        image: caddy:latest
+    web_front:
+        container_name: web_front
+        build:
+            context: ./
+            args:
+                - VITE_CLERK_PUBLISHABLE_KEY=pk_test_c3RlYWR5LWhpcHBvLTM5LmNsZXJrLmFjY291bnRzLmRldiQ
+                - VITE_BASE_API_URL=http://localhost:3000
         ports:
-            - "8090:80"
-        volumes:
-            - ./dist:/usr/share/caddy
-    nginx:
-        image: nginx:latest
+            - "80:80"
+    video_api:
+        container_name: video_api
+        build: ./video_api
         ports:
-            - "8091:80"
-        volumes:
-            - ./dist:/usr/share/nginx/html
-    apache:
-        image: httpd:latest
-        ports:
-            - "8092:80"
-        volumes:
-            - ./dist:/usr/local/apache2/htdocs
-    build-caddy:
-        build: .
-        ports:
-            - "8093:80"
+            - "3000:3000"
