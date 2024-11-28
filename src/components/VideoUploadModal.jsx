@@ -1,8 +1,10 @@
+import { useUser } from "@clerk/clerk-react";
 import { Upload, X } from "lucide-react";
 import React, { useState } from "react";
 import { uploadToS3 } from "../utils/s3Upload";
 
 export default function VideoUploadModal({ onClose, onUploadComplete }) {
+    const { user } = useUser();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [file, setFile] = useState(null);
@@ -47,7 +49,8 @@ export default function VideoUploadModal({ onClose, onUploadComplete }) {
                 url: videoUrl,
                 title,
                 description,
-                thumbnail: thumbnailUrl
+                thumbnail: thumbnailUrl,
+                channel: user.fullName
             });
 
             onClose();
