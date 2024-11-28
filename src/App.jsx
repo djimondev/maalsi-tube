@@ -9,6 +9,7 @@ import {
   createVideo,
   getVideos,
   updateVideoReaction,
+  reportVideo,
 } from "./services/video-api";
 import { useUser } from "@clerk/clerk-react";
 
@@ -17,14 +18,23 @@ function App() {
   const [filteredResults, setFilteredResults] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const { user } = useUser();
+  const [loading, setLoading] = useState(true);
+  const { user, isLoaded } = useUser();
 
   useEffect(() => {
-    getVideos().then((data) => {
+    if (!isLoaded) return; // on attend que l'utilisateur charge
+
+    getVideos().then((initialData) => {
+      // Exclure les vidéos signalées par l'utilisateur
+      const data = initialData.filter(
+        (video) => !video.reported_by?.includes(user?.id)
+      );
+
       setVideos(data);
       setFilteredResults(data);
-    });
-  }, []);
+    })
+    .finally(() => setLoading(false));
+  }, [isLoaded, user]); // Réexécuter si l'utilisateur charge ou change
 
   const filterResults = (query) => {
     const filteredVideos =
@@ -69,12 +79,26 @@ function App() {
     setSelectedVideo(updatedVideo);
   };
 
+  const handleReportVideo = async (videoId) => {
+    if (!confirm("Êtes-vous sur de vouloir signaler cette vidéo ?")) return;
+
+    const updatedVideo = await reportVideo(videoId, user?.id);
+    if (!updatedVideo) return;
+
+    // Suppression de cette vidéo des listes
+    setVideos((prev) => prev.filter((video) => video.id !== videoId));
+    setFilteredResults((prev) => prev.filter((video) => video.id !== videoId));
+
+    setSelectedVideo(null);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header onSearch={filterResults} />
       <main className="container mx-auto px-4 pt-20 pb-8">
         <UploadButton onClick={() => setShowUploadModal(true)} />
         <VideoList
+          loading={loading}
           videos={filteredResults}
           setSelectedVideo={setSelectedVideo}
         />
@@ -93,6 +117,7 @@ function App() {
           hasDisliked={selectedVideo.disliked_by?.includes(user?.id)}
           onLike={() => handleLikeVideo(selectedVideo.id)}
           onDislike={() => handleDislikeVideo(selectedVideo.id)}
+          onReport={() => handleReportVideo(selectedVideo.id)}
           onClose={() => setSelectedVideo(null)}
         />
       )}
