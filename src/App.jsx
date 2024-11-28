@@ -8,8 +8,7 @@ import "./index.css";
 import {
   createVideo,
   getVideos,
-  likeVideo,
-  dislikeVideo,
+  updateVideoReaction,
 } from "./services/video-api";
 import { useUser } from "@clerk/clerk-react";
 
@@ -45,7 +44,7 @@ function App() {
   };
 
   const handleLikeVideo = async (videoId) => {
-    const updatedVideo = await likeVideo(videoId, user?.id); // Remplace par l'ID de l'utilisateur connecté
+    const updatedVideo = await updateVideoReaction(videoId, user?.id, "like");
     if (!updatedVideo) return;
 
     setVideos((prev) =>
@@ -58,8 +57,9 @@ function App() {
   };
 
   const handleDislikeVideo = async (videoId) => {
-    const updatedVideo = await dislikeVideo(videoId, user?.id);
+    const updatedVideo = await updateVideoReaction(videoId, user?.id, "dislike");
     if (!updatedVideo) return;
+
     setVideos((prev) =>
       prev.map((video) => (video.id === updatedVideo.id ? updatedVideo : video))
     );
