@@ -2,11 +2,13 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 
 const s3Client = new S3Client({
-    region: import.meta.env.VITE_AWS_REGION,
+    region: import.meta.env.VITE_S3_BUCKET_REGION,
+    endpoint: import.meta.env.VITE_S3_BUCKET_ENDPOINT,
     credentials: {
-        accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
-        secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY
-    }
+        accessKeyId: import.meta.env.VITE_S3_BUCKET_KEY_ID,
+        secretAccessKey: import.meta.env.VITE_S3_BUCKET_SECRET_ACCESS_KEY
+    },
+    forcePathStyle: true
 });
 
 export async function uploadToS3(videoFile, thumbnailFile) {
@@ -16,8 +18,8 @@ export async function uploadToS3(videoFile, thumbnailFile) {
             Bucket: import.meta.env.VITE_S3_BUCKET,
             Key: `videos/${Date.now()}-${videoFile.name}`,
             Conditions: [
-                ["content-length-range", 0, 104857600], // Max 100MB
-                ["starts-with", "$Content-Type", "video/"]
+                ["content-length-range", 0, 104857600] // Max 100MB
+                // ["starts-with", "$Content-Type", "video/"]
             ]
         });
 
@@ -25,8 +27,8 @@ export async function uploadToS3(videoFile, thumbnailFile) {
             Bucket: import.meta.env.VITE_S3_BUCKET,
             Key: `thumbnails/${Date.now()}-${thumbnailFile.name}`,
             Conditions: [
-                ["content-length-range", 0, 5242880], // Max 5MB
-                ["starts-with", "$Content-Type", "image/"]
+                ["content-length-range", 0, 5242880] // Max 5MB
+                // ["starts-with", "$Content-Type", "image/"]
             ]
         });
 

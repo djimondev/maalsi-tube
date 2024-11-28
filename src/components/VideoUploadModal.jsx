@@ -1,5 +1,6 @@
 import { Upload, X } from "lucide-react";
 import React, { useState } from "react";
+import { uploadToS3 } from "../utils/s3Upload";
 
 export default function VideoUploadModal({ onClose, onUploadComplete }) {
     const [title, setTitle] = useState("");
@@ -31,18 +32,16 @@ export default function VideoUploadModal({ onClose, onUploadComplete }) {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        // if (!file || !thumbnail || !title || !description) {
-        //     setError("Please fill in all fields");
-        //     return;
-        // }
+        if (!file || !thumbnail || !title || !description) {
+            setError("Please fill in all fields");
+            return;
+        }
 
         setUploading(true);
         setError("");
 
         try {
-            // const { videoUrl, thumbnailUrl } = await uploadToS3(file, thumbnail);
-
-            const [videoUrl, thumbnailUrl] = ["", ""];
+            const { videoUrl, thumbnailUrl } = await uploadToS3(file, thumbnail);
 
             onUploadComplete({
                 url: videoUrl,
