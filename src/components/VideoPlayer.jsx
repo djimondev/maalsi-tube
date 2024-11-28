@@ -16,6 +16,7 @@ export const VideoPlayer = ({
   hasDisliked,
   onLike,
   onDislike,
+  onReport,
   onClose,
 }) => {
   return (
@@ -65,7 +66,10 @@ export const VideoPlayer = ({
                 <Share className="w-5 h-5" />
                 <span>Share</span>
               </button>
-              <button className="flex items-center gap-1 hover:bg-gray-100 px-3 py-2 rounded-full">
+              <button
+                className="flex items-center gap-1 hover:bg-gray-100 px-3 py-2 rounded-full"
+                onClick={onReport}
+              >
                 <Flag className="w-5 h-5" />
                 <span>Report</span>
               </button>

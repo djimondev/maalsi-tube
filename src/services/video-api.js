@@ -66,3 +66,35 @@ export const updateVideoReaction = async (videoId, userId, action) => {
 
     return await patchResponse.json();
 };
+
+export const reportVideo = async (videoId, userId) => {
+    if (!userId) {
+        alert("Vous devez être connecté.");
+        return;
+    }
+
+    if (!confirm("Êtes-vous sur de vouloir signaler cette vidéo ?")) return;
+
+    // Récupérer les informations actuelles de la vidéo
+    const response = await fetch(`${API_URL}/videos/${videoId}`);
+    const video = await response.json();
+
+    const reportedBy = new Set(video.reported_by);
+
+    reportedBy.add(userId); // Ajouter le report
+
+    // Mise à jour sur le serveur
+    const updatedVideo = {
+        reported_by: Array.from(reportedBy),
+    };
+
+    const patchResponse = await fetch(`${API_URL}/videos/${videoId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedVideo)
+    });
+
+    return await patchResponse.json();
+};
