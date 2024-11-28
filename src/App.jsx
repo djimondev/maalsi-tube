@@ -80,6 +80,8 @@ function App() {
   };
 
   const handleReportVideo = async (videoId) => {
+    if (!confirm("Êtes-vous sur de vouloir signaler cette vidéo ?")) return;
+
     const updatedVideo = await reportVideo(videoId, user?.id);
     if (!updatedVideo) return;
 

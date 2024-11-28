@@ -73,8 +73,6 @@ export const reportVideo = async (videoId, userId) => {
         return;
     }
 
-    if (!confirm("Êtes-vous sur de vouloir signaler cette vidéo ?")) return;
-
     // Récupérer les informations actuelles de la vidéo
     const response = await fetch(`${API_URL}/videos/${videoId}`);
     const video = await response.json();
